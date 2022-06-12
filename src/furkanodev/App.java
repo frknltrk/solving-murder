@@ -91,25 +91,29 @@ public class App {
 		// i.o.w: if there is already a person/weapon y in location z, then x cannot be in z.
 		kb.tell("FORALL x (FORALL z (FORALL y (NOT(x = y) AND in(y,z)) => NOT(in(x,z))))");
 
+		// if person x and weapon y are in z, then x has y.
+		kb.tell("FORALL x (FORALL y (FORALL z (person(x) AND weapon(y) AND in(x,z) AND in(y,z)) => has(x,y)))");
+		// if x has y, that means there is location z where both x and y are in.
+		kb.tell("FORALL x (FORALL y (has(x,y) => EXISTS z (in(x,z) AND in(y,z))))");
+
 		// CLUE 1
 		kb.tell("(in(x,kitchen) => man(x))");
-		kb.tell("NOT(in(rope,kitchen))");
-		kb.tell("NOT(in(knife,kitchen))");
-		kb.tell("NOT(in(bag,kitchen))");
-		kb.tell("NOT(in(firearm,kitchen))");
+		kb.tell("(in(x,kitchen) => NOT(has(x,rope)))");
+		kb.tell("(in(x,kitchen) => NOT(has(x,knife)))");
+		kb.tell("(in(x,kitchen) => NOT(has(x,bag)))");
+		kb.tell("(in(x,kitchen) => NOT(has(x,firearm)))");
 		
 		// CLUE 2
 		kb.tell("((in(Barbara,bathroom) AND in(Yolanda,study)) OR (in(Barbara,study) AND in(Yolanda,bathroom)))");
 		
 		// CLUE 3
-		kb.tell("NOT(in(bag,bathroom))");
-		kb.tell("NOT(in(bag,dining))");
-		kb.tell("NOT(in(Barbara,bathroom))");
-		kb.tell("NOT(in(Barbara,dining))");
-		
+		kb.tell("(has(x,bag) => NOT(x = Barbara))");
+		kb.tell("(has(x,bag) => NOT(x = George))");
+		kb.tell("(has(x,bag) => NOT(in(x,bathroom)))");
+		kb.tell("(has(x,bag) => NOT(in(x,dining)))");
+
 		// CLUE 4
-		kb.tell("((in(x,study) AND person(x)) => woman(x))");
-		kb.tell("in(rope,study)");
+		kb.tell("(has(x,rope) => (woman(x) AND in(x,study)))");
 		
 		// CLUE 5
 		kb.tell("(in(John,living) OR in(George,living))");
@@ -120,13 +124,13 @@ public class App {
 		// CLUE 7
 		kb.tell("NOT(in(Yolanda,study))");
 		kb.tell("NOT(in(Yolanda,pantry))");
-		
+
 		// CLUE 8
-		kb.tell("(in(firearm,x) <=> in(George,x))");
+		kb.tell("has(George,firearm)");
 		
 		// --------------------------------------------------------------
 		kb.tell("in(gas,pantry)");
-		kb.tell("((person(x) AND in(x,pantry)) => murderer(x))");
+		kb.tell("(has(x,gas)  => murderer(x))");
 		
 		return kb;
 	}
