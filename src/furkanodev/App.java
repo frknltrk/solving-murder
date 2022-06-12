@@ -48,7 +48,6 @@ public class App {
 		domain.addConstant("rope");
 		
 		domain.addPredicate("in");
-		domain.addPredicate("has");
 		
 		domain.addPredicate("murderer");
 		
